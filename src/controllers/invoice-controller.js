@@ -6,9 +6,10 @@ const invoiceService = new InvoiceService();
 const createInvoice = async (req, res) => {
   try {
     const response = await invoiceService.create({
-        product: req.body.product,
-        qty: req.body.qty,
-        rate: req.body.rate,
+      product: req.body.product,
+      qty: req.body.qty,
+      rate: req.body.rate,
+      userId: req.user,
     });
     SuccessResponse.data = response;
     return res.status(StatusCodes.CREATED).json(SuccessResponse);
@@ -19,5 +20,18 @@ const createInvoice = async (req, res) => {
   }
 };
 
+const getInvoice = async (req, res) => {
+  try {
+    const response = await invoiceService.getInvoice({
+      userId: req.user,
+    });
+    SuccessResponse.data = response;
+    return res.status(StatusCodes.CREATED).json(SuccessResponse);
+  } catch (error) {
+    console.log(error);
+    ErrorResponse.error = error;
+    return res.status(error.statusCode).json(ErrorResponse);
+  }
+};
 
-module.exports = { createInvoice };
+module.exports = { createInvoice, getInvoice };

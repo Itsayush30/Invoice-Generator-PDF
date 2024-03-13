@@ -1,7 +1,11 @@
 const express = require("express");
 
 const { createUser, signin } = require("../../controllers/user-controller");
-const { createInvoice } = require("../../controllers/invoice-controller");
+const { createInvoice,getInvoice } = require("../../controllers/invoice-controller");
+const {
+  validateAuthRequest,
+  checkAuth,
+} = require("../../middlewares/auth-request-middleware");
 
 const router = express.Router();
 
@@ -9,9 +13,12 @@ const router = express.Router();
 router.post("/user", createUser);
 
 // /api/v1/invoice POST
-router.post("/invoice", createInvoice);
+router.post("/invoice", checkAuth, createInvoice);
 
 // /api/v1//signin POST
-router.post("/signin", signin);
+router.post("/signin", validateAuthRequest, signin);
+
+// /api/v1/generatepdf GET
+router.get("/generatepdf",checkAuth,getInvoice );
 
 module.exports = router;

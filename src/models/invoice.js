@@ -15,20 +15,23 @@ const invoiceSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     total: {
-        type: Number,
-      },
+      type: Number,
+    },
   },
   { timestamps: true }
 );
 
 // Define a pre-save middleware to calculate the total
-invoiceSchema.pre('save', function(next) {
-    this.total = this.qty * this.rate;
-    next();
-  });
-  
-
+invoiceSchema.pre("save", function (next) {
+  this.total = this.qty * this.rate;
+  next();
+});
 
 const Invoice = mongoose.model("invoice", invoiceSchema); //creating model
 module.exports = Invoice;
